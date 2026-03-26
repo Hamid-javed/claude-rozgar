@@ -1,0 +1,36 @@
+appId: com.bizcore.app
+productName: BizCore
+copyright: Copyright © 2025 BizCore
+
+directories:
+  buildResources: resources
+  output: dist-installer
+
+files:
+  - "!**/.vscode/*"
+  - "!src/*"
+  - "!electron/*"
+  - "!node_modules/*/{CHANGELOG.md,README.md}"
+
+win:
+  icon: resources/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: BizCore
+
+mac:
+  icon: resources/icon.png
+  target: dmg
+  category: public.app-category.business
+
+extraResources:
+  - from: resources/
+    to: resources/
+    filter: ["**/*"]
