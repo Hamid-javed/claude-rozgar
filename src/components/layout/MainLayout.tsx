@@ -1,12 +1,20 @@
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+import { Sidebar } from './Sidebar'
+import { Header } from './Header'
+
+interface MainLayoutProps {
+  children: React.ReactNode
+}
+
+export default function MainLayout({ children }: MainLayoutProps) {
   return (
-    <div className="flex h-screen w-full">
-      <aside className="w-60 bg-sidebar-bg text-sidebar-text flex-shrink-0">
-        <div className="p-4 font-heading font-bold text-white text-lg">BizCore</div>
-      </aside>
-      <main className="flex-1 overflow-auto bg-surface-app">
-        {children}
-      </main>
+    <div className="flex h-screen w-full overflow-hidden">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <main className="flex-1 overflow-auto bg-surface-app p-6">
+          {children}
+        </main>
+      </div>
     </div>
   )
 }
