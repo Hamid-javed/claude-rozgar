@@ -14,6 +14,11 @@ import SalesList from './pages/sales/SalesList'
 import PurchasesList from './pages/purchases/PurchasesList'
 import NewPurchase from './pages/purchases/NewPurchase'
 import SupplierList from './pages/suppliers/SupplierList'
+import ExpenseList from './pages/expenses/ExpenseList'
+import CustomerList from './pages/customers/CustomerList'
+import StaffList from './pages/staff/StaffList'
+import StaffAttendance from './pages/staff/Attendance'
+import StaffPayroll from './pages/staff/Payroll'
 import MainLayout from './components/layout/MainLayout'
 import { ModuleGuard } from './components/layout/ModuleGuard'
 import { PageLoader } from './components/ui/LoadingSpinner'
@@ -92,9 +97,11 @@ export default function App() {
                         <Route path="/inventory/adjust" element={<ModuleGuard moduleKey="inventory"><StockAdjustment /></ModuleGuard>} />
                         <Route path="/inventory/movements" element={<ModuleGuard moduleKey="inventory"><StockMovements /></ModuleGuard>} />
                         <Route path="/inventory/low-stock" element={<ModuleGuard moduleKey="inventory"><LowStockReport /></ModuleGuard>} />
-                        <Route path="/expenses" element={<ModuleGuard moduleKey="expenses"><ComingSoon title="Expenses" /></ModuleGuard>} />
-                        <Route path="/staff" element={<ModuleGuard moduleKey="staff"><ComingSoon title="Staff" /></ModuleGuard>} />
-                        <Route path="/customers" element={<ModuleGuard moduleKey="customers"><ComingSoon title="Customers" /></ModuleGuard>} />
+                        <Route path="/expenses" element={<ModuleGuard moduleKey="expenses"><ExpenseList /></ModuleGuard>} />
+                        <Route path="/staff" element={<ModuleGuard moduleKey="staff"><StaffList /></ModuleGuard>} />
+                        <Route path="/staff/attendance" element={<ModuleGuard moduleKey="staff"><StaffAttendance /></ModuleGuard>} />
+                        <Route path="/staff/payroll" element={<ModuleGuard moduleKey="staff"><StaffPayroll /></ModuleGuard>} />
+                        <Route path="/customers" element={<ModuleGuard moduleKey="customers"><CustomerList /></ModuleGuard>} />
                         <Route path="/suppliers" element={<ModuleGuard moduleKey="suppliers"><SupplierList /></ModuleGuard>} />
                         <Route path="/invoices" element={<ModuleGuard moduleKey="invoices"><ComingSoon title="Invoices" /></ModuleGuard>} />
                         <Route path="/reports" element={<ModuleGuard moduleKey="reports"><ComingSoon title="Reports" /></ModuleGuard>} />
