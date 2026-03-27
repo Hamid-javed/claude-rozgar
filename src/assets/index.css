@@ -26,10 +26,43 @@
 [data-theme="dark"] {
   --bg-app: #0F172A;
   --bg-card: #1E293B;
+  --bg-table-row-alt: #172032;
   --border: #334155;
   --text-primary: #F1F5F9;
   --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --color-primary-light: rgba(37, 99, 235, 0.15);
+  --sidebar-bg: #020617;
+  --sidebar-hover: #0F172A;
 }
+
+/* Dark mode overrides for Tailwind classes */
+[data-theme="dark"] .bg-white { background-color: #1E293B !important; }
+[data-theme="dark"] .bg-gray-50 { background-color: #172032 !important; }
+[data-theme="dark"] .bg-gray-100 { background-color: #1E293B !important; }
+[data-theme="dark"] .border-surface-border { border-color: #334155 !important; }
+[data-theme="dark"] .bg-surface-app { background-color: #0F172A !important; }
+[data-theme="dark"] .bg-surface-card { background-color: #1E293B !important; }
+[data-theme="dark"] .text-txt-primary { color: #F1F5F9 !important; }
+[data-theme="dark"] .text-txt-secondary { color: #94A3B8 !important; }
+[data-theme="dark"] .text-txt-muted { color: #64748B !important; }
+[data-theme="dark"] .text-gray-800 { color: #E2E8F0 !important; }
+[data-theme="dark"] .text-gray-900 { color: #F1F5F9 !important; }
+[data-theme="dark"] .text-gray-500 { color: #94A3B8 !important; }
+[data-theme="dark"] .text-gray-400 { color: #64748B !important; }
+[data-theme="dark"] .hover\:bg-gray-50:hover { background-color: #263244 !important; }
+[data-theme="dark"] .hover\:bg-gray-100:hover { background-color: #1E293B !important; }
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+  color: #F1F5F9 !important;
+}
+[data-theme="dark"] input::placeholder, [data-theme="dark"] textarea::placeholder {
+  color: #475569 !important;
+}
+[data-theme="dark"] .shadow-sm { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2) !important; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #475569; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: #64748B; }
 
 * {
   margin: 0;

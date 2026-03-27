@@ -15,7 +15,7 @@ function createWindow(): void {
     show: false,
     title: 'BizCore',
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
+      preload: join(__dirname, '../preload/preload.js'),
       sandbox: false,
       contextIsolation: true,
       nodeIntegration: false

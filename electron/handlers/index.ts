@@ -13,6 +13,10 @@ import { registerStaffHandlers } from './staff.handler'
 import { registerReportHandlers } from './reports.handler'
 import { registerDiscountHandlers } from './discounts.handler'
 import { registerBackupHandlers } from './backup.handler'
+import { registerRestaurantHandlers } from './restaurant.handler'
+import { registerPharmacyHandlers } from './pharmacy.handler'
+import { registerRoutesHandlers } from './routes.handler'
+import { registerAuditHandlers } from './audit.handler'
 
 export function registerAllHandlers(): void {
   registerProfileHandlers()
@@ -30,4 +34,8 @@ export function registerAllHandlers(): void {
   registerReportHandlers()
   registerDiscountHandlers()
   registerBackupHandlers()
+  registerRestaurantHandlers()
+  registerPharmacyHandlers()
+  registerRoutesHandlers()
+  registerAuditHandlers()
 }

@@ -26,31 +26,25 @@ import InventoryReport from './pages/reports/InventoryReport'
 import ExpenseReport from './pages/reports/ExpenseReport'
 import ProfitLoss from './pages/reports/ProfitLoss'
 import OutstandingReport from './pages/reports/OutstandingReport'
+import SettingsPage from './pages/settings/Settings'
+import UserManagement from './pages/settings/UserManagement'
+import AuditLog from './pages/settings/AuditLog'
 import BackupRestore from './pages/settings/BackupRestore'
+import ExpiryAlerts from './pages/pharmacy/ExpiryAlerts'
+import RoutesPage from './pages/supply/RoutesPage'
+import TableManagement from './pages/restaurant/TableManagement'
+import RecipesPage from './pages/restaurant/Recipes'
 import StaffList from './pages/staff/StaffList'
 import StaffAttendance from './pages/staff/Attendance'
 import StaffPayroll from './pages/staff/Payroll'
 import MainLayout from './components/layout/MainLayout'
 import { ModuleGuard } from './components/layout/ModuleGuard'
 import { PageLoader } from './components/ui/LoadingSpinner'
-import { EmptyState } from './components/ui/EmptyState'
-import { Construction } from 'lucide-react'
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user } = useAuthStore()
   if (!user) return <Navigate to="/login" replace />
   return <>{children}</>
-}
-
-/** Placeholder for pages not yet built */
-function ComingSoon({ title }: { title: string }) {
-  return (
-    <EmptyState
-      icon={<Construction className="w-8 h-8" />}
-      title={`${title} — Coming Soon`}
-      description="This module will be built in the next phase."
-    />
-  )
 }
 
 function AppInitializer({ children }: { children: React.ReactNode }) {
@@ -60,17 +54,23 @@ function AppInitializer({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const init = async () => {
-      const profileResult = await window.api.invoke('profile:exists') as { success: boolean; exists: boolean }
-      const userResult = await window.api.invoke('auth:user-exists') as { success: boolean; exists: boolean }
+      try {
+        const profileResult = await window.api.invoke('profile:exists') as { success: boolean; exists: boolean }
+        const userResult = await window.api.invoke('auth:user-exists') as { success: boolean; exists: boolean }
 
-      if (!profileResult.exists || !userResult.exists) {
+        if (!profileResult.exists || !userResult.exists) {
+          navigate('/setup', { replace: true })
+          setChecking(false)
+          return
+        }
+
+        await loadProfile()
+      } catch (err) {
+        console.error('AppInitializer failed:', err)
         navigate('/setup', { replace: true })
+      } finally {
         setChecking(false)
-        return
       }
-
-      await loadProfile()
-      setChecking(false)
     }
     init()
   }, [])
@@ -114,7 +114,7 @@ export default function App() {
                         <Route path="/staff/payroll" element={<ModuleGuard moduleKey="staff"><StaffPayroll /></ModuleGuard>} />
                         <Route path="/customers" element={<ModuleGuard moduleKey="customers"><CustomerList /></ModuleGuard>} />
                         <Route path="/suppliers" element={<ModuleGuard moduleKey="suppliers"><SupplierList /></ModuleGuard>} />
-                        <Route path="/invoices" element={<ModuleGuard moduleKey="invoices"><ComingSoon title="Invoices" /></ModuleGuard>} />
+                        <Route path="/invoices" element={<ModuleGuard moduleKey="invoices"><SalesList /></ModuleGuard>} />
                         <Route path="/reports" element={<ModuleGuard moduleKey="reports"><ReportsHub /></ModuleGuard>} />
                         <Route path="/reports/financial" element={<ModuleGuard moduleKey="reports"><FinancialSummary /></ModuleGuard>} />
                         <Route path="/reports/sales" element={<ModuleGuard moduleKey="reports"><SalesReport /></ModuleGuard>} />
@@ -125,11 +125,13 @@ export default function App() {
                         <Route path="/reports/outstanding" element={<ModuleGuard moduleKey="reports"><OutstandingReport /></ModuleGuard>} />
                         <Route path="/discounts" element={<ModuleGuard moduleKey="discounts"><DiscountsPage /></ModuleGuard>} />
                         <Route path="/barcode" element={<ModuleGuard moduleKey="barcode_scanner"><BarcodeLabels /></ModuleGuard>} />
-                        <Route path="/recipes" element={<ModuleGuard moduleKey="recipes"><ComingSoon title="Recipes" /></ModuleGuard>} />
-                        <Route path="/tables" element={<ModuleGuard moduleKey="tables"><ComingSoon title="Table Management" /></ModuleGuard>} />
-                        <Route path="/routes" element={<ModuleGuard moduleKey="routes"><ComingSoon title="Routes" /></ModuleGuard>} />
-                        <Route path="/prescriptions" element={<ModuleGuard moduleKey="prescriptions"><ComingSoon title="Prescriptions" /></ModuleGuard>} />
-                        <Route path="/settings" element={<ComingSoon title="Settings" />} />
+                        <Route path="/recipes" element={<ModuleGuard moduleKey="recipes"><RecipesPage /></ModuleGuard>} />
+                        <Route path="/tables" element={<ModuleGuard moduleKey="tables"><TableManagement /></ModuleGuard>} />
+                        <Route path="/routes" element={<ModuleGuard moduleKey="routes"><RoutesPage /></ModuleGuard>} />
+                        <Route path="/prescriptions" element={<ModuleGuard moduleKey="prescriptions"><ExpiryAlerts /></ModuleGuard>} />
+                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route path="/settings/users" element={<UserManagement />} />
+                        <Route path="/settings/audit" element={<AuditLog />} />
                         <Route path="/settings/backup" element={<BackupRestore />} />
                         <Route path="*" element={<Navigate to="/dashboard" replace />} />
                       </Routes>
