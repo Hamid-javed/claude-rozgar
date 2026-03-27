@@ -266,6 +266,45 @@ export const salesRepo = {
     return getDb().prepare("UPDATE sales SET deleted_at = datetime('now') WHERE id = ?").run(id)
   },
 
+  createReturn(data: {
+    original_sale_id: number; return_reason: string; refund_method: string
+    created_by?: number; items: { sale_item_id: number; product_id: number; product_name: string; quantity: number; unit_price: number; line_total: number }[]
+  }) {
+    const db = getDb()
+    const totalAmount = data.items.reduce((sum, i) => sum + i.line_total, 0)
+    const returnNumber = `RET-${Date.now()}`
+
+    const doReturn = db.transaction(() => {
+      const result = db.prepare(`
+        INSERT INTO sale_returns (return_number, original_sale_id, return_date, return_reason, total_amount, refund_method, created_by)
+        VALUES (?, ?, date('now'), ?, ?, ?, ?)
+      `).run(returnNumber, data.original_sale_id, data.return_reason, totalAmount, data.refund_method, data.created_by || null)
+
+      const returnId = result.lastInsertRowid as number
+      const insertItem = db.prepare(`INSERT INTO sale_return_items (return_id, sale_item_id, product_id, product_name, quantity, unit_price, line_total) VALUES (?, ?, ?, ?, ?, ?, ?)`)
+
+      for (const item of data.items) {
+        insertItem.run(returnId, item.sale_item_id, item.product_id, item.product_name, item.quantity, item.unit_price, item.line_total)
+
+        // Restore stock
+        db.prepare('UPDATE products SET current_stock = current_stock + ?, updated_at = datetime(\'now\') WHERE id = ? AND track_stock = 1').run(item.quantity, item.product_id)
+
+        const product = db.prepare('SELECT current_stock FROM products WHERE id = ?').get(item.product_id) as { current_stock: number } | undefined
+        if (product) {
+          db.prepare(`INSERT INTO stock_movements (product_id, movement_type, quantity, quantity_before, quantity_after, reference_id, reference_type, created_by)
+            VALUES (?, 'return', ?, ?, ?, ?, 'return', ?)`).run(
+            item.product_id, item.quantity, product.current_stock - item.quantity, product.current_stock, returnId, data.created_by || null)
+        }
+      }
+
+      // Update sale status
+      db.prepare("UPDATE sales SET status = 'returned', updated_at = datetime('now') WHERE id = ?").run(data.original_sale_id)
+
+      return { returnId, returnNumber, totalAmount }
+    })
+    return doReturn()
+  },
+
   getTodayStats() {
     const today = new Date().toISOString().split('T')[0]
     const db = getDb()

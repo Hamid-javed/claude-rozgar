@@ -7,7 +7,8 @@ import { printContent } from '@/utils/printHelpers'
 import { InvoiceA4 } from '@/components/invoice/InvoiceA4'
 import { ReceiptThermal } from '@/components/invoice/ReceiptThermal'
 import { useProfileStore } from '@/store/profileStore'
-import { Printer, FileText, Receipt } from 'lucide-react'
+import { Printer, FileText, Receipt, RotateCcw } from 'lucide-react'
+import { SaleReturn } from './SaleReturn'
 import toast from 'react-hot-toast'
 
 interface SaleItem {
@@ -60,6 +61,7 @@ export function SaleDetail({ open, saleId, currency, onClose }: Props) {
   const { profile } = useProfileStore()
   const [sale, setSale] = useState<SaleData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [returnOpen, setReturnOpen] = useState(false)
 
   useEffect(() => {
     if (!open || !saleId) return
@@ -99,6 +101,11 @@ export function SaleDetail({ open, saleId, currency, onClose }: Props) {
       size="lg"
       footer={
         <div className="flex items-center gap-2">
+          {sale && sale.status !== 'returned' && sale.status !== 'cancelled' && (
+            <Button variant="danger" size="sm" icon={<RotateCcw className="w-4 h-4" />} onClick={() => setReturnOpen(true)}>
+              Return
+            </Button>
+          )}
           <Button variant="secondary" size="sm" icon={<Printer className="w-4 h-4" />} onClick={() => handlePrint('a4')}>
             Print A4
           </Button>
@@ -210,6 +217,24 @@ export function SaleDetail({ open, saleId, currency, onClose }: Props) {
             </div>
           )}
         </div>
+      )}
+
+      {sale && (
+        <SaleReturn
+          open={returnOpen}
+          saleId={sale.id}
+          items={sale.items}
+          currency={currency}
+          onClose={(returned) => {
+            setReturnOpen(false)
+            if (returned) {
+              // Reload sale data
+              window.api.invoke('sales:get', { id: saleId }).then((r: any) => {
+                if (r.success) setSale(r.data)
+              })
+            }
+          }}
+        />
       )}
     </Drawer>
   )

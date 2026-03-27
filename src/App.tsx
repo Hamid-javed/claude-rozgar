@@ -9,6 +9,7 @@ import ProductList from './pages/inventory/ProductList'
 import StockAdjustment from './pages/inventory/StockAdjustment'
 import StockMovements from './pages/inventory/StockMovements'
 import LowStockReport from './pages/inventory/LowStockReport'
+import BarcodeLabels from './pages/inventory/BarcodeLabels'
 import POS from './pages/pos/POS'
 import SalesList from './pages/sales/SalesList'
 import PurchasesList from './pages/purchases/PurchasesList'
@@ -16,6 +17,7 @@ import NewPurchase from './pages/purchases/NewPurchase'
 import SupplierList from './pages/suppliers/SupplierList'
 import ExpenseList from './pages/expenses/ExpenseList'
 import CustomerList from './pages/customers/CustomerList'
+import DiscountsPage from './pages/discounts/Discounts'
 import ReportsHub from './pages/reports/ReportsHub'
 import FinancialSummary from './pages/reports/FinancialSummary'
 import SalesReport from './pages/reports/SalesReport'
@@ -24,6 +26,7 @@ import InventoryReport from './pages/reports/InventoryReport'
 import ExpenseReport from './pages/reports/ExpenseReport'
 import ProfitLoss from './pages/reports/ProfitLoss'
 import OutstandingReport from './pages/reports/OutstandingReport'
+import BackupRestore from './pages/settings/BackupRestore'
 import StaffList from './pages/staff/StaffList'
 import StaffAttendance from './pages/staff/Attendance'
 import StaffPayroll from './pages/staff/Payroll'
@@ -120,14 +123,14 @@ export default function App() {
                         <Route path="/reports/expenses" element={<ModuleGuard moduleKey="reports"><ExpenseReport /></ModuleGuard>} />
                         <Route path="/reports/profit-loss" element={<ModuleGuard moduleKey="reports"><ProfitLoss /></ModuleGuard>} />
                         <Route path="/reports/outstanding" element={<ModuleGuard moduleKey="reports"><OutstandingReport /></ModuleGuard>} />
-                        <Route path="/discounts" element={<ModuleGuard moduleKey="discounts"><ComingSoon title="Discounts" /></ModuleGuard>} />
-                        <Route path="/barcode" element={<ModuleGuard moduleKey="barcode_scanner"><ComingSoon title="Barcode Scanner" /></ModuleGuard>} />
+                        <Route path="/discounts" element={<ModuleGuard moduleKey="discounts"><DiscountsPage /></ModuleGuard>} />
+                        <Route path="/barcode" element={<ModuleGuard moduleKey="barcode_scanner"><BarcodeLabels /></ModuleGuard>} />
                         <Route path="/recipes" element={<ModuleGuard moduleKey="recipes"><ComingSoon title="Recipes" /></ModuleGuard>} />
                         <Route path="/tables" element={<ModuleGuard moduleKey="tables"><ComingSoon title="Table Management" /></ModuleGuard>} />
                         <Route path="/routes" element={<ModuleGuard moduleKey="routes"><ComingSoon title="Routes" /></ModuleGuard>} />
                         <Route path="/prescriptions" element={<ModuleGuard moduleKey="prescriptions"><ComingSoon title="Prescriptions" /></ModuleGuard>} />
                         <Route path="/settings" element={<ComingSoon title="Settings" />} />
-                        <Route path="/settings/backup" element={<ComingSoon title="Backup & Restore" />} />
+                        <Route path="/settings/backup" element={<BackupRestore />} />
                         <Route path="*" element={<Navigate to="/dashboard" replace />} />
                       </Routes>
                     </MainLayout>

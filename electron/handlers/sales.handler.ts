@@ -30,6 +30,15 @@ export function registerSalesHandlers(): void {
     }
   })
 
+  ipcMain.handle('sales:return', (_event, data) => {
+    try {
+      const result = salesRepo.createReturn(data)
+      return { success: true, ...result }
+    } catch (error: unknown) {
+      return { success: false, error: (error as Error).message }
+    }
+  })
+
   ipcMain.handle('sales:delete', (_event, { id }: { id: number }) => {
     try {
       salesRepo.delete(id)
