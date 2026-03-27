@@ -10,6 +10,7 @@ import { registerSupplierHandlers } from './suppliers.handler'
 import { registerExpenseHandlers } from './expenses.handler'
 import { registerCustomerHandlers } from './customers.handler'
 import { registerStaffHandlers } from './staff.handler'
+import { registerReportHandlers } from './reports.handler'
 
 export function registerAllHandlers(): void {
   registerProfileHandlers()
@@ -24,4 +25,5 @@ export function registerAllHandlers(): void {
   registerExpenseHandlers()
   registerCustomerHandlers()
   registerStaffHandlers()
+  registerReportHandlers()
 }

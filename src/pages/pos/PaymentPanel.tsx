@@ -137,7 +137,7 @@ export function PaymentPanel({ open, onClose, currency, onSaleComplete }: Props)
           )}
 
           <div className="flex items-center gap-3 mt-8">
-            <Button variant="secondary" icon={<Printer className="w-4 h-4" />} onClick={() => toast('Print coming in Phase 5')}>
+            <Button variant="secondary" icon={<Printer className="w-4 h-4" />} onClick={() => toast.success('Open sale from Sales list to print')}>
               Print Receipt
             </Button>
             <Button onClick={handleNewSale}>

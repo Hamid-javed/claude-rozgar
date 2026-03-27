@@ -16,6 +16,14 @@ import NewPurchase from './pages/purchases/NewPurchase'
 import SupplierList from './pages/suppliers/SupplierList'
 import ExpenseList from './pages/expenses/ExpenseList'
 import CustomerList from './pages/customers/CustomerList'
+import ReportsHub from './pages/reports/ReportsHub'
+import FinancialSummary from './pages/reports/FinancialSummary'
+import SalesReport from './pages/reports/SalesReport'
+import PurchaseReport from './pages/reports/PurchaseReport'
+import InventoryReport from './pages/reports/InventoryReport'
+import ExpenseReport from './pages/reports/ExpenseReport'
+import ProfitLoss from './pages/reports/ProfitLoss'
+import OutstandingReport from './pages/reports/OutstandingReport'
 import StaffList from './pages/staff/StaffList'
 import StaffAttendance from './pages/staff/Attendance'
 import StaffPayroll from './pages/staff/Payroll'
@@ -104,7 +112,14 @@ export default function App() {
                         <Route path="/customers" element={<ModuleGuard moduleKey="customers"><CustomerList /></ModuleGuard>} />
                         <Route path="/suppliers" element={<ModuleGuard moduleKey="suppliers"><SupplierList /></ModuleGuard>} />
                         <Route path="/invoices" element={<ModuleGuard moduleKey="invoices"><ComingSoon title="Invoices" /></ModuleGuard>} />
-                        <Route path="/reports" element={<ModuleGuard moduleKey="reports"><ComingSoon title="Reports" /></ModuleGuard>} />
+                        <Route path="/reports" element={<ModuleGuard moduleKey="reports"><ReportsHub /></ModuleGuard>} />
+                        <Route path="/reports/financial" element={<ModuleGuard moduleKey="reports"><FinancialSummary /></ModuleGuard>} />
+                        <Route path="/reports/sales" element={<ModuleGuard moduleKey="reports"><SalesReport /></ModuleGuard>} />
+                        <Route path="/reports/purchases" element={<ModuleGuard moduleKey="reports"><PurchaseReport /></ModuleGuard>} />
+                        <Route path="/reports/inventory" element={<ModuleGuard moduleKey="reports"><InventoryReport /></ModuleGuard>} />
+                        <Route path="/reports/expenses" element={<ModuleGuard moduleKey="reports"><ExpenseReport /></ModuleGuard>} />
+                        <Route path="/reports/profit-loss" element={<ModuleGuard moduleKey="reports"><ProfitLoss /></ModuleGuard>} />
+                        <Route path="/reports/outstanding" element={<ModuleGuard moduleKey="reports"><OutstandingReport /></ModuleGuard>} />
                         <Route path="/discounts" element={<ModuleGuard moduleKey="discounts"><ComingSoon title="Discounts" /></ModuleGuard>} />
                         <Route path="/barcode" element={<ModuleGuard moduleKey="barcode_scanner"><ComingSoon title="Barcode Scanner" /></ModuleGuard>} />
                         <Route path="/recipes" element={<ModuleGuard moduleKey="recipes"><ComingSoon title="Recipes" /></ModuleGuard>} />

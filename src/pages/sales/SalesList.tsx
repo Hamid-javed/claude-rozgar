@@ -5,12 +5,14 @@ import {
 } from 'lucide-react'
 import {
   PageHeader, Button, Input, Select, DataTable, Badge,
-  Card, ConfirmDialog, EmptyState
+  Card, ConfirmDialog, EmptyState, ExportMenu
 } from '@/components/ui'
 import { Drawer } from '@/components/ui/Drawer'
 import { SaleDetail } from './SaleDetail'
 import { useProfileStore } from '@/store/profileStore'
 import { formatCurrency, formatDate } from '@/utils/formatters'
+import { exportToExcel } from '@/utils/exportExcel'
+import { exportToPdf } from '@/utils/exportPdf'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
@@ -191,9 +193,36 @@ export default function SalesList() {
         title="Sales"
         subtitle={`${total} total sales`}
         actions={
-          <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => navigate('/pos')}>
-            New Sale
-          </Button>
+          <div className="flex gap-2">
+            <ExportMenu
+              onExportExcel={() => {
+                const cols = [
+                  { header: 'Invoice', key: 'invoice_number', width: 20 },
+                  { header: 'Date', key: 'sale_date', width: 14 },
+                  { header: 'Customer', key: 'customer_name', width: 20 },
+                  { header: 'Total', key: 'grand_total', width: 14 },
+                  { header: 'Paid', key: 'amount_paid', width: 14 },
+                  { header: 'Due', key: 'amount_due', width: 14 },
+                  { header: 'Status', key: 'status', width: 10 },
+                  { header: 'Payment', key: 'payment_method', width: 14 }
+                ]
+                exportToExcel({ data: sales, columns: cols, filename: 'Sales_Report' })
+              }}
+              onExportPdf={() => {
+                const cols = [
+                  { header: 'Invoice', key: 'invoice_number' },
+                  { header: 'Date', key: 'sale_date' },
+                  { header: 'Customer', key: 'customer_name' },
+                  { header: 'Total', key: 'grand_total' },
+                  { header: 'Status', key: 'status' }
+                ]
+                exportToPdf({ title: 'Sales Report', columns: cols, data: sales, filename: 'Sales_Report', businessName: profile?.name })
+              }}
+            />
+            <Button size="sm" icon={<Plus className="w-4 h-4" />} onClick={() => navigate('/pos')}>
+              New Sale
+            </Button>
+          </div>
         }
       />
 

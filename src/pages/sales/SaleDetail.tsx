@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { createRoot } from 'react-dom/client'
 import { Drawer } from '@/components/ui/Drawer'
 import { Badge, Button } from '@/components/ui'
 import { formatCurrency, formatDate, formatDateTime } from '@/utils/formatters'
-import { Printer, FileText } from 'lucide-react'
+import { printContent } from '@/utils/printHelpers'
+import { InvoiceA4 } from '@/components/invoice/InvoiceA4'
+import { ReceiptThermal } from '@/components/invoice/ReceiptThermal'
+import { useProfileStore } from '@/store/profileStore'
+import { Printer, FileText, Receipt } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 interface SaleItem {
@@ -52,6 +57,7 @@ interface Props {
 }
 
 export function SaleDetail({ open, saleId, currency, onClose }: Props) {
+  const { profile } = useProfileStore()
   const [sale, setSale] = useState<SaleData | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -66,6 +72,25 @@ export function SaleDetail({ open, saleId, currency, onClose }: Props) {
     load()
   }, [open, saleId])
 
+  const handlePrint = (type: 'a4' | 'receipt') => {
+    if (!sale || !profile) return
+    const business = { name: profile.name, address: profile.address, phone: profile.phone, email: profile.email, tax_id: profile.tax_id, currency_symbol: profile.currency_symbol, receipt_footer: profile.receipt_footer }
+
+    // Render the component to HTML string
+    const container = document.createElement('div')
+    const root = createRoot(container)
+    if (type === 'a4') {
+      root.render(<InvoiceA4 sale={sale} business={business} />)
+    } else {
+      root.render(<ReceiptThermal sale={sale} business={business} />)
+    }
+
+    setTimeout(() => {
+      printContent(container.innerHTML, `Invoice ${sale.invoice_number}`)
+      root.unmount()
+    }, 100)
+  }
+
   return (
     <Drawer
       open={open}
@@ -74,8 +99,11 @@ export function SaleDetail({ open, saleId, currency, onClose }: Props) {
       size="lg"
       footer={
         <div className="flex items-center gap-2">
-          <Button variant="secondary" icon={<Printer className="w-4 h-4" />} onClick={() => toast('Print coming in Phase 5')}>
-            Print
+          <Button variant="secondary" size="sm" icon={<Printer className="w-4 h-4" />} onClick={() => handlePrint('a4')}>
+            Print A4
+          </Button>
+          <Button variant="secondary" size="sm" icon={<Receipt className="w-4 h-4" />} onClick={() => handlePrint('receipt')}>
+            Receipt
           </Button>
           <Button variant="ghost" onClick={onClose}>Close</Button>
         </div>
